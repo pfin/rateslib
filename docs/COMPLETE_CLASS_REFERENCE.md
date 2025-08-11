@@ -57,9 +57,10 @@ class Curve(_WithState, _WithCache):
     
     Parameters:
         nodes: dict[datetime, float]  # Date-rate pairs
-        interpolation: str  # 'linear', 'log_linear', 'linear_index'
+        interpolation: str  # 'linear', 'log_linear', 'linear_index', 'cubic_spline'
         ad: int  # Automatic differentiation order (0, 1, 2)
         id: str  # Optional identifier
+        t: list[float]  # Optional knot sequence for splines
     
     Methods:
         rate(date: datetime, tenor: str = None) -> float | Dual
@@ -363,20 +364,20 @@ class Schedule:
     Parameters:
         effective: datetime
         termination: datetime
-        frequency: str
+        frequency: str  # 'A', 'S', 'Q', 'M', 'W', 'D'
         calendar: str | Cal
-        modifier: str  # Business day adjustment
+        modifier: str  # Business day adjustment ('MF', 'F', 'P', etc.)
         eval_date: datetime
-        roll: int | str  # Roll day or 'eom'
-        stub: str  # Stub type
+        roll: int | str  # Roll day (1-31) or 'eom', 'imm'
+        stub: str  # 'ShortFront', 'ShortBack', 'LongFront', 'LongBack'
     
     Properties:
-        dates: list[datetime]  # Unadjusted dates
-        adjusted_dates: list[datetime]
+        dates: list[datetime]  # Unadjusted schedule dates
+        adjusted_dates: list[datetime]  # Business day adjusted dates
         
     Methods:
         dcf(convention: str) -> list[float]  # Day count fractions
-        is_regular() -> bool
+        is_regular() -> bool  # Check if all periods are regular
 ```
 
 ### `Tenor`

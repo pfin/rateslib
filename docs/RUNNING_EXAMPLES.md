@@ -170,12 +170,9 @@ Script completed successfully!
 python ../scripts/examples/coding/scheduling.py
 ```
 
-**Expected Error:**
-```
-ImportError: cannot import name '_get_unadjusted_roll' from 'rateslib.scheduling'
-```
+**Note:** The original notebook uses deprecated private functions that have been removed.
 
-**Issue:** Uses deprecated private functions. Use modern Schedule class instead:
+**Modern Approach:** Use the public Schedule class instead:
 ```python
 from rateslib.scheduling import Schedule
 schedule = Schedule(
@@ -374,9 +371,9 @@ Script completed successfully!
 
 | Old (Private) | New (Public) |
 |--------------|--------------|
-| `_get_unadjusted_roll()` | `Schedule()` class |
-| `_set_ad_order()` | `ad` parameter in constructor |
-| `approximate=True` | Removed - use default behavior |
+| `_get_unadjusted_roll()` | `Schedule()` class with `dates` property |
+| `set_ad_order()` | `ad` parameter in constructor |
+| `approximate=True` | No longer needed - exact calculation is default |
 
 ### Required Import Pattern
 

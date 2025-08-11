@@ -161,9 +161,9 @@ flowchart TD
     FinalDates --> End([End])
 ```
 
-### Known Issues
-- Original notebook uses private functions (`_get_unadjusted_roll`)
-- Should use public `Schedule` class API instead
+### Important Note
+- Original notebook used private functions that have been removed
+- Modern code should use the public `Schedule` class API
 
 ### Corrected Usage
 ```python
@@ -490,8 +490,8 @@ log_spline.csolve(
 
 | Private Function | Public Replacement |
 |-----------------|-------------------|
-| `_get_unadjusted_roll()` | `Schedule.dates` |
-| `_set_ad_order()` | Use `ad` parameter in constructor |
+| `_get_unadjusted_roll()` | `Schedule().dates` property |
+| `set_ad_order()` | Use `ad` parameter in constructor |
 | Direct attribute access | Use property methods |
 
 ### Import Best Practices

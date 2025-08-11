@@ -317,3 +317,42 @@ All Rust components are exposed via PyO3 bindings and tested through Python test
 - Type stubs (`.pyi` files) provide type hints for Rust modules
 - The codebase follows strict type checking with mypy in strict mode
 - Ruff is configured for comprehensive linting with specific rule sets enabled
+
+## Notebooks and Examples
+
+### Jupyter Notebooks
+The project includes educational Jupyter notebooks in the `notebooks/` directory:
+- `coding/` - Basic examples demonstrating core functionality
+- `coding_2/` - Advanced examples with detailed explanations
+
+**Note**: Some notebooks use private/internal functions (prefixed with `_`) for educational purposes. These are not part of the public API.
+
+### Running Examples
+
+#### As Notebooks
+```bash
+cd notebooks
+jupyter lab
+```
+
+#### As Python Scripts
+Notebooks have been converted to standalone Python scripts:
+
+```bash
+# From the python/ directory
+cd python
+
+# Run individual example
+python ../scripts/examples/coding_2/Curves.py
+
+# Run all examples with error handling
+python ../scripts/run_all_examples.py
+```
+
+### Converting Notebooks to Scripts
+To convert new notebooks:
+```bash
+python scripts/convert_notebooks_v2.py
+```
+
+This creates executable Python scripts in `scripts/examples/` that can be run without Jupyter.

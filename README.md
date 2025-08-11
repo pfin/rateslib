@@ -222,10 +222,53 @@ rateslib/
 │   └── tests/       # Test suite
 ├── rust/            # Rust source code for performance-critical components
 ├── notebooks/       # Jupyter notebooks with examples
+├── scripts/         # Utility scripts and converted examples
+├── docs/            # Architecture and design documentation
 ├── Cargo.toml       # Rust dependencies and configuration
 ├── pyproject.toml   # Python project configuration
 └── CLAUDE.md        # Developer guidance for AI assistants
 ```
+
+Architecture Overview
+---------------------
+
+Rateslib uses a sophisticated hybrid Python/Rust architecture with several key design patterns:
+
+### Core Components
+
+1. **Curves** - Interest rate curve construction with multiple interpolation methods
+   - Base curves with caching and state management
+   - Composite curves for multi-curve environments
+   - Automatic differentiation support via dual numbers
+
+2. **Instruments** - Financial instrument modeling
+   - Hierarchical structure: Instruments → Legs → Periods → Cashflows
+   - Support for bonds, swaps, FRAs, cross-currency swaps, and more
+   - Built-in NPV, rate, and sensitivity calculations
+
+3. **FX System** - Foreign exchange handling
+   - Spot and forward FX rates
+   - Interest rate parity calculations
+   - Multi-currency instrument support
+
+4. **Dual Numbers** - Automatic differentiation
+   - First and second-order derivatives
+   - Seamless integration throughout the codebase
+   - Enables efficient risk calculations
+
+5. **Solver** - Curve calibration
+   - Newton-Raphson optimization
+   - Multi-curve simultaneous calibration
+   - Full sensitivity support
+
+### Key Design Patterns
+
+- **Mixin Architecture**: Composable functionality via `_WithCache`, `_WithState`, `_WithOperations`
+- **Wrapper Pattern**: Curve transformations (shift, roll, translate) via lightweight wrappers
+- **Automatic Differentiation**: Pervasive use of dual numbers for sensitivity calculations
+- **Rust Acceleration**: Performance-critical paths implemented in Rust via PyO3
+
+For detailed architecture diagrams and component analysis, see `docs/ARCHITECTURE.md`.
 
 
 

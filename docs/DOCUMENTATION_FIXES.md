@@ -11,9 +11,11 @@
   - Fixed `approximate=True` parameter references (parameter removed)
   - Updated error messages to be informative rather than showing ImportError
 
-#### 2. Implementation Status Updated
+#### 2. Implementation Status Corrected
 - **File**: `COOKBOOK_IMPLEMENTATION.md`
-  - Updated status from "14 of 29" to "28 of 29 recipes completed"
+  - Verified actual implementation: 14 of 28 recipes fully implemented
+  - Recipes 1-12, 18, and 25 have complete code
+  - Recipes 13-17, 19-24, 26-28 are placeholders
   - Added details about YAML configuration support
   - Added information about daily forwards and butterfly targeting
   - Added notes about turn period handling
@@ -42,7 +44,8 @@
 
 ### Remaining Work
 
-1. **Recipe 29**: Nelson-Siegel-Svensson curve implementation pending
+1. **14 Placeholder Recipes**: Need full implementation for recipes 13-17, 19-24, 26-28
+2. **Total Recipes**: 28 (not 29 as originally thought)
 2. **Code Examples**: Some example scripts still contain deprecated code
 3. **Test Suite**: Documentation for test patterns needs updating
 

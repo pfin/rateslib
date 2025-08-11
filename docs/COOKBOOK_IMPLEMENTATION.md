@@ -210,19 +210,26 @@ Typical convergence patterns:
 | CSA differences large | Verify curve construction and FX forwards |
 | Performance slow | Enable caching, use sparse nodes |
 
-## Implementation Status: 28 of 29 recipes completed ✅
+## Implementation Status: 14 of 28 recipes fully implemented ✅
 
-All recipes have been implemented with:
+**Fully Implemented (14 recipes):**
+- Recipes 1-12: Complete with full code from documentation
+- Recipe 18: Working with fixings (implemented)
+- Recipe 25: Exogenous variables (implemented)
+
+**Placeholder Status (14 recipes):**
+- Recipes 13-17, 19-24, 26-28: Structure defined, awaiting full implementation
+
+All implemented recipes include:
 - Full YAML configuration support
 - Daily forward calculations with butterfly targeting
 - Turn period handling for year-end effects
 - Mixed curve interpolation (the "correct curve")
 - Parallel execution support via subagents
-- Comprehensive error handling
 
 ## Next Steps
 
-1. **Complete Recipe 29**: Nelson-Siegel-Svensson curve implementation
+1. **Complete Remaining 14 Recipes**: Implement placeholder recipes 13-17, 19-24, 26-28
 2. **Production Testing**: Validate with real market data
 3. **Performance Benchmarks**: Compare interpolation methods
 4. **Documentation**: Add inline code documentation

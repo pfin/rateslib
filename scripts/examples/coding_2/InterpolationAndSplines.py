@@ -112,11 +112,21 @@ log_spline.csolve(
 log_spline.c
 
 
-import matplotlib.pyplot as plt
-x = [_.timestamp() for _ in [
-    dt(2022, 1, 1) + timedelta(days=i) for i in range(720)]]
-fix, ax = plt.subplots(1,1)
-ax.plot(x, [exp(log_spline.ppev_single(_)) for _ in x])
+try:
+    import matplotlib.pyplot as plt
+    x = [_.timestamp() for _ in [
+        dt(2022, 1, 1) + timedelta(days=i) for i in range(720)]]
+    fig, ax = plt.subplots(1,1)
+    ax.plot(x, [exp(log_spline.ppev_single(_)) for _ in x])
+    ax.set_title('Discount Factor Curve from Log-Spline')
+    ax.set_xlabel('Time (timestamp)')
+    ax.set_ylabel('Discount Factor')
+    plt.show()
+    print("Plot displayed successfully!")
+except ImportError:
+    print("Matplotlib not available - skipping plot")
+except Exception as e:
+    print(f"Plotting error: {e}")
     
 
 

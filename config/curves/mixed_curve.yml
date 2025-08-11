@@ -1,0 +1,141 @@
+# Mixed Curve Configuration
+# This configuration creates a curve with different interpolation methods in different regions
+# Short end: Log-linear (money markets)
+# Long end: Cubic spline (bonds and long-term swaps)
+
+curve:
+  id: mixed_curve
+  convention: act365f
+  calendar: all
+  interpolation: log_linear  # Base interpolation method
+  
+  # Node dates with initial discount factors (all 1.0 for calibration)
+  nodes:
+    - date: 2022-01-01
+      df: 1.0
+    - date: 2022-03-15
+      df: 1.0
+    - date: 2022-06-15
+      df: 1.0
+    - date: 2022-09-21
+      df: 1.0
+    - date: 2022-12-21
+      df: 1.0
+    - date: 2023-03-15
+      df: 1.0
+    - date: 2023-06-21
+      df: 1.0
+    - date: 2023-09-20
+      df: 1.0
+    - date: 2023-12-20
+      df: 1.0
+    - date: 2024-03-15
+      df: 1.0
+    - date: 2025-01-01
+      df: 1.0
+    - date: 2027-01-01
+      df: 1.0
+    - date: 2029-01-01
+      df: 1.0
+    - date: 2032-01-01
+      df: 1.0
+
+  # CRITICAL: Knot sequence for mixed interpolation
+  # These dates define where interpolation method transitions occur
+  # Dates before 2024-03-15: Log-linear (money market region)
+  # Dates after 2025-01-01: Cubic spline (bond market region)
+  # Transition zone: 2024-03-15 to 2025-01-01
+  knot_sequence:
+    - 2024-03-15  # Repeated 4 times for spline start
+    - 2024-03-15
+    - 2024-03-15
+    - 2024-03-15
+    - 2025-01-01  # Transition points
+    - 2027-01-01
+    - 2029-01-01
+    - 2032-01-01  # Repeated 4 times for spline end
+    - 2032-01-01
+    - 2032-01-01
+    - 2032-01-01
+
+# Calibration instruments for the curve
+calibration:
+  instruments:
+    # Short-term (money market) - calibrated with log-linear
+    - type: IRS
+      effective: 2022-01-01
+      termination: 1b  # 1 business day (overnight)
+      rate: 1.00
+    - type: IRS
+      effective: 2022-03-15
+      termination: 2022-06-15
+      rate: 1.05
+    - type: IRS
+      effective: 2022-06-15
+      termination: 2022-09-21
+      rate: 1.12
+    - type: IRS
+      effective: 2022-09-21
+      termination: 2022-12-21
+      rate: 1.16
+    - type: IRS
+      effective: 2022-12-21
+      termination: 2023-03-15
+      rate: 1.21
+    - type: IRS
+      effective: 2023-03-15
+      termination: 2023-06-21
+      rate: 1.27
+    - type: IRS
+      effective: 2023-06-21
+      termination: 2023-09-20
+      rate: 1.45
+    - type: IRS
+      effective: 2023-09-20
+      termination: 2023-12-20
+      rate: 1.68
+    - type: IRS
+      effective: 2023-12-20
+      termination: 2024-03-15
+      rate: 1.92
+    
+    # Long-term (bond market) - calibrated with cubic spline
+    - type: IRS
+      effective: 2022-01-01
+      termination: 3y
+      rate: 1.68
+    - type: IRS
+      effective: 2022-01-01
+      termination: 5y
+      rate: 2.10
+    - type: IRS
+      effective: 2022-01-01
+      termination: 7y
+      rate: 2.20
+    - type: IRS
+      effective: 2022-01-01
+      termination: 10y
+      rate: 2.07
+
+# Solver configuration
+solver:
+  algorithm: levenberg_marquardt
+  tolerance: 1.0e-12
+  max_iterations: 100
+  
+# Interpolation regions explanation
+interpolation_regions:
+  money_market:
+    method: log_linear
+    region: "< 2 years"
+    rationale: "Preserves forward rate stability in short end"
+  
+  transition:
+    method: blend
+    region: "2-3 years"
+    rationale: "Smooth transition between methods"
+  
+  bond_market:
+    method: cubic_spline
+    region: "> 3 years"
+    rationale: "Smooth forward curves for long-term instruments"

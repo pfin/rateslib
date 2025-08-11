@@ -1,0 +1,206 @@
+# Leg Configuration Examples
+
+# Fixed Rate Legs
+fixed_legs:
+  - id: standard_fixed
+    description: Standard fixed rate leg
+    notional: 100000000
+    currency: USD
+    fixed_rate: 3.50  # 3.50%
+    frequency: S  # Semi-annual
+    convention: 30/360
+    calendar: nyc
+    payment_lag: 2
+    
+  - id: annual_fixed
+    description: Annual fixed payments
+    notional: 50000000
+    currency: EUR
+    fixed_rate: 2.25
+    frequency: A
+    convention: act/act
+    calendar: tgt
+    payment_lag: 0
+
+# Floating Rate Legs
+float_legs:
+  - id: sofr_float
+    description: SOFR floating leg
+    notional: 100000000
+    currency: USD
+    index: SOFR
+    frequency: Q  # Quarterly
+    convention: act/360
+    calendar: nyc
+    payment_lag: 2
+    spread: 0.0015  # 15 bps
+    fixing_lag: 2
+    
+  - id: euribor_float
+    description: EURIBOR floating leg
+    notional: 50000000
+    currency: EUR
+    index: EURIBOR_3M
+    frequency: Q
+    convention: act/360
+    calendar: tgt
+    payment_lag: 2
+    spread: 0.0010  # 10 bps
+    fixing_lag: 2
+    
+  - id: compounded_sofr
+    description: Compounded SOFR leg
+    notional: 100000000
+    currency: USD
+    index: SOFR
+    frequency: Q
+    convention: act/360
+    calendar: nyc
+    compounding: daily
+    lookback: 5  # 5 day lookback
+    lockout: 2  # 2 day lockout
+
+# Index definitions
+indexes:
+  - id: SOFR
+    description: Secured Overnight Financing Rate
+    currency: USD
+    tenor: 1D
+    convention: act/360
+    calendar: nyc
+    fixing_lag: 0
+    
+  - id: EURIBOR_3M
+    description: 3-month EURIBOR
+    currency: EUR
+    tenor: 3M
+    convention: act/360
+    calendar: tgt
+    fixing_lag: 2
+    
+  - id: EURIBOR_6M
+    description: 6-month EURIBOR
+    currency: EUR
+    tenor: 6M
+    convention: act/360
+    calendar: tgt
+    fixing_lag: 2
+    
+  - id: SONIA
+    description: Sterling Overnight Index Average
+    currency: GBP
+    tenor: 1D
+    convention: act/365f
+    calendar: lon
+    fixing_lag: 0
+
+# Credit legs
+credit_legs:
+  - id: cds_premium_leg
+    description: CDS premium leg
+    notional: 10000000
+    currency: USD
+    spread: 0.0100  # 100 bps
+    frequency: Q
+    convention: act/360
+    calendar: all
+    accrual_on_default: true
+    
+  - id: cds_protection_leg
+    description: CDS protection leg
+    notional: 10000000
+    currency: USD
+    recovery_rate: 0.40  # 40% recovery
+    pay_on_default: true
+
+# Inflation-linked legs
+inflation_legs:
+  - id: cpi_linked
+    description: CPI-linked leg
+    notional: 50000000
+    currency: USD
+    index: US_CPI
+    base_index: 250.0
+    frequency: S
+    convention: 30/360
+    calendar: nyc
+    lag: 3M  # 3 month lag
+    
+  - id: tips_principal
+    description: TIPS principal adjustment
+    notional: 100000000
+    currency: USD
+    index: US_CPI_NSA
+    base_index: 245.5
+    floor: 1.0  # Principal floor at par
+
+# Exotic leg features
+exotic_features:
+  - id: range_accrual
+    description: Range accrual leg
+    notional: 100000000
+    underlying_index: SOFR
+    range_lower: 0.02  # 2%
+    range_upper: 0.06  # 6%
+    in_range_rate: 0.05  # 5%
+    out_range_rate: 0.00  # 0%
+    observation: daily
+    
+  - id: capped_floored
+    description: Capped and floored floating leg
+    notional: 50000000
+    index: EURIBOR_3M
+    cap_rate: 0.04  # 4% cap
+    floor_rate: 0.01  # 1% floor
+    frequency: Q
+    
+  - id: step_up_coupon
+    description: Step-up fixed coupon
+    notional: 100000000
+    coupon_schedule:
+      - {from: 2024-01-01, to: 2025-01-01, rate: 0.02}
+      - {from: 2025-01-01, to: 2026-01-01, rate: 0.025}
+      - {from: 2026-01-01, to: 2027-01-01, rate: 0.03}
+      - {from: 2027-01-01, to: 2029-01-01, rate: 0.035}
+
+# Amortization schedules
+amortization:
+  - id: linear_amortization
+    description: Linear principal amortization
+    type: linear
+    start_date: 2024-01-01
+    end_date: 2029-01-01
+    frequency: M
+    
+  - id: bullet_payment
+    description: Bullet payment at maturity
+    type: bullet
+    maturity: 2029-01-01
+    
+  - id: custom_schedule
+    description: Custom amortization schedule
+    type: custom
+    schedule:
+      - {date: 2024-12-31, amount: 10000000}
+      - {date: 2025-12-31, amount: 15000000}
+      - {date: 2026-12-31, amount: 20000000}
+      - {date: 2027-12-31, amount: 25000000}
+      - {date: 2028-12-31, amount: 30000000}
+
+# Leg combination examples
+leg_combinations:
+  - id: vanilla_irs
+    description: Vanilla interest rate swap
+    pay_leg: standard_fixed
+    receive_leg: sofr_float
+    
+  - id: basis_swap
+    description: Basis swap
+    pay_leg: sofr_float
+    receive_leg: euribor_float
+    fx_reset: true
+    
+  - id: inflation_swap
+    description: Inflation swap
+    pay_leg: standard_fixed
+    receive_leg: cpi_linked

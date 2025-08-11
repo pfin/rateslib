@@ -1,0 +1,48 @@
+# Cubic Spline Curve Configuration
+# Smooth forward rate interpolation
+
+curve:
+  id: log_cubic_curve
+  convention: act365f
+  calendar: all
+  interpolation: spline  # Cubic spline interpolation
+  
+  nodes:
+    - {date: 2022-01-01, df: 1.0}
+    - {date: 2022-03-15, df: 1.0}
+    - {date: 2022-06-15, df: 1.0}
+    - {date: 2022-09-21, df: 1.0}
+    - {date: 2022-12-21, df: 1.0}
+    - {date: 2023-03-15, df: 1.0}
+    - {date: 2023-06-21, df: 1.0}
+    - {date: 2023-09-20, df: 1.0}
+    - {date: 2023-12-20, df: 1.0}
+    - {date: 2024-03-15, df: 1.0}
+    - {date: 2025-01-01, df: 1.0}
+    - {date: 2027-01-01, df: 1.0}
+    - {date: 2029-01-01, df: 1.0}
+    - {date: 2032-01-01, df: 1.0}
+
+calibration:
+  frequency: a
+  payment_lag: 0
+  
+  instruments:
+    - {type: IRS, effective: 2022-01-01, termination: 1b, rate: 1.00}
+    - {type: IRS, effective: 2022-03-15, termination: 2022-06-15, rate: 1.05}
+    - {type: IRS, effective: 2022-06-15, termination: 2022-09-21, rate: 1.12}
+    - {type: IRS, effective: 2022-09-21, termination: 2022-12-21, rate: 1.16}
+    - {type: IRS, effective: 2022-12-21, termination: 2023-03-15, rate: 1.21}
+    - {type: IRS, effective: 2023-03-15, termination: 2023-06-21, rate: 1.27}
+    - {type: IRS, effective: 2023-06-21, termination: 2023-09-20, rate: 1.45}
+    - {type: IRS, effective: 2023-09-20, termination: 2023-12-20, rate: 1.68}
+    - {type: IRS, effective: 2023-12-20, termination: 2024-03-15, rate: 1.92}
+    - {type: IRS, effective: 2022-01-01, termination: 3y, rate: 1.68}
+    - {type: IRS, effective: 2022-01-01, termination: 5y, rate: 2.10}
+    - {type: IRS, effective: 2022-01-01, termination: 7y, rate: 2.20}
+    - {type: IRS, effective: 2022-01-01, termination: 10y, rate: 2.07}
+
+solver:
+  algorithm: levenberg_marquardt
+  tolerance: 1.0e-12
+  max_iterations: 100

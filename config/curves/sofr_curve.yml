@@ -1,0 +1,66 @@
+# SOFR Curve Configuration
+# USD SOFR curve with market conventions
+
+curve:
+  id: sofr
+  convention: Act360
+  calendar: nyc
+  modifier: MF  # Modified Following
+  interpolation: log_linear
+  
+  # Base date for curve
+  base_date: 2023-09-27
+  
+  # Settlement date
+  settlement_date: 2023-09-29
+
+calibration:
+  spec: usd_irs  # USD IRS specification
+  
+  instruments:
+    - {term: 1W, rate: 5.309}
+    - {term: 2W, rate: 5.312}
+    - {term: 3W, rate: 5.314}
+    - {term: 1M, rate: 5.318}
+    - {term: 2M, rate: 5.351}
+    - {term: 3M, rate: 5.382}
+    - {term: 4M, rate: 5.410}
+    - {term: 5M, rate: 5.435}
+    - {term: 6M, rate: 5.452}
+    - {term: 7M, rate: 5.467}
+    - {term: 8M, rate: 5.471}
+    - {term: 9M, rate: 5.470}
+    - {term: 10M, rate: 5.467}
+    - {term: 11M, rate: 5.457}
+    - {term: 12M, rate: 5.445}
+    - {term: 18M, rate: 5.208}
+    - {term: 2Y, rate: 4.990}
+    - {term: 3Y, rate: 4.650}
+    - {term: 4Y, rate: 4.458}
+    - {term: 5Y, rate: 4.352}
+    - {term: 6Y, rate: 4.291}
+    - {term: 7Y, rate: 4.250}
+    - {term: 8Y, rate: 4.224}
+    - {term: 9Y, rate: 4.210}
+    - {term: 10Y, rate: 4.201}
+    - {term: 12Y, rate: 4.198}
+    - {term: 15Y, rate: 4.199}
+    - {term: 20Y, rate: 4.153}
+    - {term: 25Y, rate: 4.047}
+    - {term: 30Y, rate: 3.941}
+    - {term: 40Y, rate: 3.719}
+
+solver:
+  id: us_rates
+  algorithm: levenberg_marquardt
+  tolerance: 1.0e-12
+  max_iterations: 100
+
+# Example trade to price
+example_trade:
+  type: IRS
+  effective: 2023-11-21
+  termination: 2025-02-21
+  notional: -100000000  # Pay fixed
+  fixed_rate: 5.40
+  spec: usd_irs

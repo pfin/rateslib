@@ -1,0 +1,78 @@
+# Automatic Differentiation Example Configuration
+
+examples:
+  - name: basic_dual_operations
+    description: Basic dual number arithmetic
+    operations:
+      - type: create_dual
+        variable: x
+        value: 2.0
+        derivatives: [1.0]
+      - type: create_dual
+        variable: y
+        value: 3.0
+        derivatives: [0.0, 1.0]
+      - type: operation
+        function: x * y + x**2
+        expected_value: 10.0
+        expected_derivatives: [7.0, 2.0]
+  
+  - name: sin_function
+    description: Dual sin function implementation
+    function: |
+      def dual_sin(x):
+          if isinstance(x, Dual):
+              return Dual(
+                  np.sin(x.real),
+                  ["x"],
+                  [np.cos(x.real) * x.dual[0]]
+              )
+          return np.sin(x)
+    test_cases:
+      - input: 1.5708  # π/2
+        expected_real: 1.0
+        expected_dual: 0.0
+      - input: 0.0
+        expected_real: 0.0
+        expected_dual: 1.0
+  
+  - name: portfolio_sensitivities
+    description: Portfolio Greeks calculation
+    portfolio:
+      - instrument: Option
+        strike: 100
+        spot: 100
+        volatility: 0.20
+        time: 1.0
+        rate: 0.05
+      - instrument: Option
+        strike: 105
+        spot: 100
+        volatility: 0.22
+        time: 0.5
+        rate: 0.05
+    calculate:
+      - delta
+      - gamma
+      - vega
+      - theta
+  
+  - name: curve_sensitivities
+    description: Curve risk sensitivities using AD
+    curve:
+      type: log_linear
+      nodes:
+        - {date: 2023-01-01, df: 1.0}
+        - {date: 2023-06-01, df: 0.98}
+        - {date: 2024-01-01, df: 0.95}
+    instrument:
+      type: IRS
+      notional: 100000000
+      fixed_rate: 2.5
+      tenor: 1Y
+    sensitivities:
+      - type: parallel_shift
+        amount: 0.0001  # 1bp
+      - type: bucket_shift
+        bucket: 6M
+        amount: 0.0001

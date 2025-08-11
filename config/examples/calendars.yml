@@ -1,0 +1,125 @@
+# Calendar Configuration Examples
+
+calendars:
+  # Major financial centers
+  - id: nyc
+    name: New York
+    holidays_2024:
+      - 2024-01-01  # New Year's Day
+      - 2024-01-15  # MLK Day
+      - 2024-02-19  # Presidents Day
+      - 2024-05-27  # Memorial Day
+      - 2024-06-19  # Juneteenth
+      - 2024-07-04  # Independence Day
+      - 2024-09-02  # Labor Day
+      - 2024-10-14  # Columbus Day
+      - 2024-11-11  # Veterans Day
+      - 2024-11-28  # Thanksgiving
+      - 2024-12-25  # Christmas
+  
+  - id: lon
+    name: London
+    holidays_2024:
+      - 2024-01-01  # New Year's Day
+      - 2024-03-29  # Good Friday
+      - 2024-04-01  # Easter Monday
+      - 2024-05-06  # Early May Bank Holiday
+      - 2024-05-27  # Spring Bank Holiday
+      - 2024-08-26  # Summer Bank Holiday
+      - 2024-12-25  # Christmas
+      - 2024-12-26  # Boxing Day
+  
+  - id: tgt
+    name: TARGET (Eurozone)
+    holidays_2024:
+      - 2024-01-01  # New Year's Day
+      - 2024-03-29  # Good Friday
+      - 2024-04-01  # Easter Monday
+      - 2024-05-01  # Labour Day
+      - 2024-12-25  # Christmas
+      - 2024-12-26  # Christmas Holiday
+  
+  - id: tko
+    name: Tokyo
+    holidays_2024:
+      - 2024-01-01  # New Year's Day
+      - 2024-01-08  # Coming of Age Day
+      - 2024-02-11  # National Foundation Day
+      - 2024-02-12  # Substitute Holiday
+      - 2024-02-23  # Emperor's Birthday
+      - 2024-03-20  # Vernal Equinox Day
+      - 2024-04-29  # Showa Day
+      - 2024-05-03  # Constitution Day
+      - 2024-05-04  # Greenery Day
+      - 2024-05-05  # Children's Day
+      - 2024-05-06  # Substitute Holiday
+      - 2024-07-15  # Marine Day
+      - 2024-08-11  # Mountain Day
+      - 2024-08-12  # Substitute Holiday
+      - 2024-09-16  # Respect for the Aged Day
+      - 2024-09-22  # Autumnal Equinox Day
+      - 2024-09-23  # Substitute Holiday
+      - 2024-10-14  # Health and Sports Day
+      - 2024-11-03  # Culture Day
+      - 2024-11-04  # Substitute Holiday
+      - 2024-11-23  # Labour Thanksgiving Day
+
+# Business day conventions
+conventions:
+  - id: following
+    description: Move to next business day
+    
+  - id: modified_following
+    description: Move to next business day unless crossing month boundary
+    
+  - id: preceding
+    description: Move to previous business day
+    
+  - id: modified_preceding
+    description: Move to previous business day unless crossing month boundary
+    
+  - id: end_of_month
+    description: Always use last business day of month
+
+# Joint calendars
+joint_calendars:
+  - id: nyc_lon
+    calendars: [nyc, lon]
+    description: NYSE and LSE joint calendar
+    
+  - id: all_major
+    calendars: [nyc, lon, tgt, tko]
+    description: All major financial centers
+
+# Day count conventions
+day_counts:
+  - id: act360
+    description: Actual/360
+    
+  - id: act365f
+    description: Actual/365 Fixed
+    
+  - id: 30360
+    description: 30/360 Bond Basis
+    
+  - id: actact
+    description: Actual/Actual ISDA
+    
+  - id: bus252
+    description: Business/252 (Brazil)
+
+# Example usage
+examples:
+  - name: Calculate business days
+    start_date: 2024-01-01
+    end_date: 2024-12-31
+    calendar: nyc
+    convention: modified_following
+    
+  - name: Generate payment schedule
+    effective: 2024-01-15
+    termination: 2025-01-15
+    frequency: quarterly
+    calendar: tgt
+    convention: modified_following
+    roll_day: 15

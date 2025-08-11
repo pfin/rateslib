@@ -1,0 +1,75 @@
+# Credit Curve Configuration - Pfizer CDS Example
+
+# SOFR discount curve
+discount_curve:
+  id: sofr
+  base_date: 2024-10-04
+  spot: 2024-10-08
+  convention: act360
+  calendar: nyc
+  interpolation: log_linear
+  
+  calibration:
+    instruments:
+      - {tenor: 1m, rate: 4.8457}
+      - {tenor: 2m, rate: 4.7002}
+      - {tenor: 3m, rate: 4.5924}
+      - {tenor: 6m, rate: 4.3019}
+      - {tenor: 12m, rate: 3.8992}
+      - {tenor: 2y, rate: 3.5032}
+      - {tenor: 3y, rate: 3.3763}
+      - {tenor: 4y, rate: 3.3295}
+      - {tenor: 5y, rate: 3.3165}
+      - {tenor: 6y, rate: 3.3195}
+      - {tenor: 7y, rate: 3.3305}
+      - {tenor: 8y, rate: 3.3450}
+      - {tenor: 9y, rate: 3.3635}
+      - {tenor: 10y, rate: 3.3830}
+      - {tenor: 12y, rate: 3.4245}
+    spec: usd_irs
+
+# Hazard curve for credit
+hazard_curve:
+  id: pfizer
+  base_date: 2024-10-04
+  spot: 2024-10-08
+  convention: act365f
+  calendar: all
+  interpolation: log_linear
+  
+  calibration:
+    effective: 2024-09-20
+    maturity_base: 2024-12-20
+    spec: us_ig_cds
+    discount_curve: sofr
+    
+    instruments:
+      - {tenor: 6m, spread: 11.011}  # bps
+      - {tenor: 12m, spread: 14.189}
+      - {tenor: 2y, spread: 20.750}
+      - {tenor: 3y, spread: 26.859}
+      - {tenor: 4y, spread: 32.862}
+      - {tenor: 5y, spread: 37.861}
+      - {tenor: 7y, spread: 51.068}
+      - {tenor: 10y, spread: 66.891}
+
+# Example CDS for pricing
+example_cds:
+  effective: 2024-09-20
+  termination: 2029-12-20  # 5Y
+  spec: us_ig_cds
+  notional: 10000000  # $10mm
+  
+  analytics:
+    - par_spread
+    - npv
+    - accrued_interest
+    - spread_dv01
+    - ir_dv01
+    - recovery_risk
+  
+  # Dates for survival probability calculation
+  survival_dates:
+    - 2025-10-04  # 1Y
+    - 2029-10-04  # 5Y
+    - 2034-10-04  # 10Y

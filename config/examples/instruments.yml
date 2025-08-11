@@ -1,0 +1,136 @@
+# Instruments Example Configuration
+
+bonds:
+  - id: US_Treasury_10Y
+    type: FixedRateBond
+    effective: 2023-01-15
+    maturity: 2033-01-15
+    coupon: 3.75
+    frequency: S  # Semi-annual
+    convention: Act/Act
+    calendar: nyc
+    notional: 100
+    
+    analytics:
+      - yield_to_maturity
+      - duration
+      - convexity
+      - dv01
+      - accrued_interest
+  
+  - id: German_Bund_5Y
+    type: FixedRateBond
+    effective: 2023-03-01
+    maturity: 2028-03-01
+    coupon: 2.50
+    frequency: A  # Annual
+    convention: Act/Act
+    calendar: tgt
+    notional: 100
+
+swaps:
+  - id: USD_IRS_5Y
+    type: IRS
+    effective: 2023-01-03
+    maturity: 2028-01-03
+    notional: 100000000
+    fixed_rate: 4.25
+    fixed_frequency: S
+    float_frequency: Q
+    float_index: SOFR
+    convention: Act/360
+    calendar: nyc
+    
+    pricing:
+      curves:
+        discount: usd_ois
+        forecast: usd_sofr
+  
+  - id: EUR_IRS_10Y
+    type: IRS
+    effective: 2023-01-03
+    maturity: 2033-01-03
+    notional: 50000000
+    fixed_rate: 3.00
+    fixed_frequency: A
+    float_frequency: S
+    float_index: EURIBOR_6M
+    convention: 30/360
+    calendar: tgt
+
+cross_currency_swaps:
+  - id: EURUSD_XCS_5Y
+    type: XCS
+    effective: 2023-01-03
+    maturity: 2028-01-03
+    notional_leg1: 100000000  # EUR
+    notional_leg2: 105500000  # USD (at spot)
+    
+    leg1:  # EUR leg
+      currency: EUR
+      type: float
+      index: EURIBOR_3M
+      spread: 0  # bps
+      frequency: Q
+    
+    leg2:  # USD leg
+      currency: USD
+      type: float
+      index: SOFR
+      spread: -15  # bps (pay 15bps)
+      frequency: Q
+    
+    fx:
+      initial_exchange: true
+      final_exchange: true
+      spot: 1.0550
+
+fra:
+  - id: USD_FRA_3x6
+    type: FRA
+    effective: 2023-04-03  # 3M forward
+    termination: 2023-07-03  # 6M end
+    notional: 50000000
+    fixed_rate: 5.10
+    index: SOFR
+    convention: Act/360
+    calendar: nyc
+
+bond_futures:
+  - id: US_10Y_Future
+    type: BondFuture
+    delivery_date: 2023-03-15
+    ctd_bond: US_Treasury_10Y
+    conversion_factor: 0.8125
+    futures_price: 115.50
+    notional: 100000
+    
+    analytics:
+      - implied_yield
+      - basis
+      - dv01
+      - ctd_analysis
+
+# Portfolio aggregation
+portfolio:
+  name: Fixed_Income_Portfolio
+  base_currency: USD
+  
+  positions:
+    - instrument: US_Treasury_10Y
+      quantity: 10000000  # $10mm face
+    - instrument: USD_IRS_5Y
+      quantity: 1  # 1 swap
+      side: pay_fixed
+    - instrument: EUR_IRS_10Y
+      quantity: 2
+      side: receive_fixed
+    - instrument: EURUSD_XCS_5Y
+      quantity: 1
+  
+  risk_metrics:
+    - total_pv01
+    - total_dv01
+    - currency_breakdown
+    - maturity_buckets: [1Y, 2Y, 3Y, 5Y, 7Y, 10Y, 15Y, 20Y, 30Y]
+    - key_rate_durations

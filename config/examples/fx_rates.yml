@@ -1,0 +1,95 @@
+# FX Rates Example Configuration
+
+fx_system:
+  base_currency: USD
+  settlement: 2023-01-03
+  
+  spot_rates:
+    EURUSD: 1.0550
+    GBPUSD: 1.2100
+    USDJPY: 132.50
+    USDCHF: 0.9250
+    AUDUSD: 0.6750
+    USDCAD: 1.3550
+    NZDUSD: 0.6250
+  
+  # Triangulation examples
+  triangulation:
+    - pair: EURGBP
+      path: [EUR, USD, GBP]
+      expected: 0.8719  # 1.0550 / 1.2100
+    - pair: EURJPY
+      path: [EUR, USD, JPY]
+      expected: 139.7875  # 1.0550 * 132.50
+    - pair: GBPCHF
+      path: [GBP, USD, CHF]
+      expected: 1.1193  # 1.2100 * 0.9250
+
+# Multi-currency portfolio example
+portfolio:
+  positions:
+    EUR: 10000000
+    GBP: -5000000
+    JPY: 1000000000
+    USD: -2000000
+  
+  base_currency: USD
+  
+  risk_scenarios:
+    - name: USD_strength
+      shocks:
+        EURUSD: -0.02  # -2%
+        GBPUSD: -0.02
+        USDJPY: 0.02   # JPY weakens
+    - name: Risk_off
+      shocks:
+        AUDUSD: -0.05
+        NZDUSD: -0.05
+        USDJPY: -0.03  # JPY strengthens
+
+# FX Forward pricing
+fx_forwards:
+  curves:
+    USD:
+      type: flat
+      rate: 0.0525  # 5.25%
+    EUR:
+      type: flat
+      rate: 0.0375  # 3.75%
+    GBP:
+      type: flat
+      rate: 0.0450  # 4.50%
+    JPY:
+      type: flat
+      rate: -0.0010  # -0.10%
+  
+  forwards_to_price:
+    - pair: EURUSD
+      tenors: [1M, 3M, 6M, 1Y]
+    - pair: USDJPY
+      tenors: [1M, 3M, 6M, 1Y]
+  
+  # Interest rate parity formula
+  # F = S * (1 + r_quote * t) / (1 + r_base * t)
+
+# Dual number FX sensitivities
+sensitivities:
+  enable_ad: true
+  
+  instruments:
+    - type: FX_Forward
+      pair: EURUSD
+      notional_eur: 10000000
+      forward_rate: 1.0650
+      settlement: 3M
+    - type: FX_Option
+      pair: EURUSD
+      notional_eur: 5000000
+      strike: 1.0600
+      expiry: 6M
+      option_type: call
+  
+  calculate:
+    - spot_delta
+    - forward_points_sensitivity
+    - rate_sensitivity

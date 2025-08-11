@@ -1,0 +1,99 @@
+# Dependency Chain Configuration
+# Multi-curve framework with EUR, USD, and EUR/USD basis
+
+# EUR domestic curve
+eur_curve:
+  id: eureur
+  convention: act360
+  calendar: tgt
+  interpolation: log_linear
+  
+  nodes:
+    - {date: 2022-01-01, df: 1.0}
+    - {date: 2022-05-01, df: 1.0}
+    - {date: 2023-01-01, df: 1.0}
+  
+  calibration:
+    spec: eur_irs
+    effective: 2022-01-03
+    instruments:
+      - {termination: 4M, rate: 2.0}
+      - {termination: 1Y, rate: 2.5}
+
+# USD domestic curve
+usd_curve:
+  id: usdusd
+  convention: act360
+  calendar: nyc
+  interpolation: log_linear
+  
+  nodes:
+    - {date: 2022-01-01, df: 1.0}
+    - {date: 2022-08-01, df: 1.0}
+    - {date: 2023-01-01, df: 1.0}
+  
+  calibration:
+    spec: usd_irs
+    effective: 2022-01-03
+    instruments:
+      - {termination: 7M, rate: 4.0}
+      - {termination: 1Y, rate: 4.8}
+
+# FX configuration
+fx:
+  settlement: 2022-01-03
+  rates:
+    eurusd: 1.10
+
+# EUR/USD cross-currency basis curve
+xcs_curve:
+  id: eurusd
+  convention: act360
+  calendar: null  # No calendar for basis curve
+  interpolation: log_linear
+  
+  nodes:
+    - {date: 2022-01-01, df: 1.0}
+    - {date: 2022-05-01, df: 1.0}
+    - {date: 2022-09-01, df: 1.0}
+    - {date: 2023-01-01, df: 1.0}
+  
+  calibration:
+    spec: eurusd_xcs
+    effective: 2022-01-03
+    # Curves order: [EUR forecast, EUR/USD basis, USD forecast, USD discount]
+    curve_setup: [eureur, eurusd, usdusd, usdusd]
+    instruments:
+      - {termination: 4m, spread: -5.0}   # -5 bps
+      - {termination: 8m, spread: -6.5}   # -6.5 bps
+      - {termination: 1y, spread: -11.0}  # -11 bps
+
+# Solver dependencies
+solver_chain:
+  # Solve in order
+  - id: eur
+    type: domestic
+    curve: eureur
+  - id: usd
+    type: domestic
+    curve: usdusd
+  - id: eur/usd
+    type: cross_currency
+    curve: eurusd
+    pre_solvers: [eur, usd]  # Dependencies
+
+# Example trade for CSA comparison
+example_trade:
+  type: IRS
+  spec: eur_irs
+  effective: 2022-01-03
+  termination: 9M
+  fixed_rate: 1.15
+  notional: 100000000
+  
+  # CSA configurations to compare
+  csa_configs:
+    - name: EUR CSA
+      curves: [eureur]
+    - name: USD CSA
+      curves: [eureur, eurusd]  # EUR forecast, USD discount

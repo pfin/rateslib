@@ -1,0 +1,182 @@
+# Turns Curve Configuration - Handle year-end and special date rate changes
+
+# Turn dates - rapid rate changes at specific dates
+turns:
+  - id: year_end_2024
+    description: Year-end turn 2024
+    dates:
+      start: 2024-12-31
+      end: 2025-01-02
+    rate_adjustment: -50  # bps adjustment over turn
+    
+  - id: quarter_end_q1_2025
+    description: Q1 2025 quarter-end
+    dates:
+      start: 2025-03-31
+      end: 2025-04-01
+    rate_adjustment: -20  # bps
+    
+  - id: imm_march_2025
+    description: IMM date March 2025
+    dates:
+      start: 2025-03-19
+      end: 2025-03-20
+    rate_adjustment: -10  # bps
+
+# Base curve with turn adjustments
+base_curve:
+  id: base_with_turns
+  convention: act360
+  calendar: nyc
+  interpolation: log_linear
+  base_date: 2024-11-01
+  
+  # Standard nodes
+  nodes:
+    - {date: 2024-11-01, df: 1.0}
+    - {date: 2024-12-01, df: 1.0}
+    - {date: 2024-12-30, df: 1.0}  # Before turn
+    - {date: 2024-12-31, df: 1.0}  # Turn start
+    - {date: 2025-01-02, df: 1.0}  # Turn end
+    - {date: 2025-01-03, df: 1.0}  # After turn
+    - {date: 2025-02-01, df: 1.0}
+    - {date: 2025-03-01, df: 1.0}
+    - {date: 2025-06-01, df: 1.0}
+    - {date: 2025-12-01, df: 1.0}
+    - {date: 2026-12-01, df: 1.0}
+
+# Turn curve for adjustment
+turn_curve:
+  id: turn_adjustment
+  convention: act360
+  calendar: nyc
+  interpolation: log_linear
+  
+  nodes:
+    - {date: 2024-11-01, df: 1.0}
+    - {date: 2024-12-30, df: 1.0}
+    - {date: 2024-12-31, df: 1.0}
+    - {date: 2025-01-02, df: 1.0}
+    - {date: 2025-01-03, df: 1.0}
+    - {date: 2025-12-01, df: 1.0}
+
+# Composite curve combining base and turns
+composite_curve:
+  id: composite_with_turns
+  type: composite
+  components:
+    - base_with_turns
+    - turn_adjustment
+  
+# Calibration instruments
+calibration:
+  # Regular instruments
+  standard_instruments:
+    - {type: IRS, effective: 2024-11-01, term: 1M, rate: 4.50}
+    - {type: IRS, effective: 2024-11-01, term: 2M, rate: 4.45}
+    - {type: IRS, effective: 2024-11-01, term: 3M, rate: 4.40}
+    - {type: IRS, effective: 2024-11-01, term: 6M, rate: 4.35}
+    - {type: IRS, effective: 2024-11-01, term: 1Y, rate: 4.25}
+    - {type: IRS, effective: 2024-11-01, term: 2Y, rate: 4.10}
+  
+  # Turn-specific instruments
+  turn_instruments:
+    - {type: IRS, effective: 2024-12-30, term: 1b, rate: 4.50}  # Before turn
+    - {type: IRS, effective: 2024-12-31, term: 1b, rate: -3.00} # During turn (negative)
+    - {type: IRS, effective: 2025-01-02, term: 1b, rate: 4.50}  # After turn
+
+# Butterfly targeting configuration
+butterfly_targeting:
+  enabled: true
+  
+  # Butterfly points - (left wing, body, right wing)
+  butterflies:
+    - id: 2y5y10y
+      points:
+        left: 2Y
+        body: 5Y
+        right: 10Y
+      target_curvature: 0.0  # Flat butterfly
+      weight: 1.0
+      
+    - id: 3m6m1y
+      points:
+        left: 3M
+        body: 6M
+        right: 1Y
+      target_curvature: 5.0  # bps
+      weight: 0.5
+      
+    - id: 5y10y30y
+      points:
+        left: 5Y
+        body: 10Y
+        right: 30Y
+      target_curvature: -2.0  # bps
+      weight: 0.8
+
+# Daily overnight forward plotting configuration
+daily_forward_plot:
+  enabled: true
+  
+  # Date range for daily forwards
+  start_date: 2024-11-01
+  end_date: 2026-01-01
+  
+  # Plotting options
+  plot_options:
+    title: Daily Overnight Forward Rates with Turns
+    y_label: Rate (%)
+    x_label: Date
+    grid: true
+    figsize: [12, 6]
+    
+    # Highlight turn periods
+    highlight_turns: true
+    turn_color: red
+    turn_alpha: 0.2
+    
+    # Show butterfly points
+    show_butterflies: true
+    butterfly_markers: o
+    butterfly_color: blue
+    
+  # Forward rate calculation
+  forward_calculation:
+    convention: act360
+    compound: simple
+    
+  # Statistics to display
+  statistics:
+    - mean
+    - std
+    - min
+    - max
+    - turn_impact  # bps impact from turns
+
+# Solver configuration
+solver:
+  algorithm: levenberg_marquardt
+  tolerance: 1e-12
+  max_iterations: 100
+  
+  # Use pre-solver for turn curve
+  use_presolver: true
+  presolver_curves: [turn_adjustment]
+  
+# Output configuration
+output:
+  # Save plots
+  save_plots: true
+  plot_dir: ./plots/turns/
+  
+  # Export forward rates
+  export_forwards: true
+  forward_file: daily_forwards.csv
+  
+  # Include in output
+  include:
+    - daily_forwards
+    - turn_impacts
+    - butterfly_values
+    - calibration_errors

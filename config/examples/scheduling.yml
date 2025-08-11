@@ -1,0 +1,184 @@
+# Scheduling Configuration Examples
+
+# Schedule generation examples
+schedules:
+  - id: quarterly_schedule
+    description: Standard quarterly payment schedule
+    effective: 2024-01-15
+    termination: 2026-01-15
+    frequency: Q  # Quarterly
+    calendar: nyc
+    convention: modified_following
+    payment_lag: 2  # Payment 2 days after period end
+    roll_day: 15
+    stub_type: short_initial
+    
+  - id: monthly_schedule
+    description: Monthly payment schedule
+    effective: 2024-01-01
+    termination: 2024-12-31
+    frequency: M  # Monthly
+    calendar: lon
+    convention: end_of_month
+    payment_lag: 0
+    
+  - id: semi_annual_schedule
+    description: Semi-annual bond coupon schedule
+    effective: 2024-03-15
+    termination: 2034-03-15
+    frequency: S  # Semi-annual
+    calendar: nyc
+    convention: unadjusted
+    payment_lag: 0
+    roll_day: 15
+    
+  - id: annual_schedule
+    description: Annual payment schedule
+    effective: 2024-01-01
+    termination: 2029-01-01
+    frequency: A  # Annual
+    calendar: tgt
+    convention: following
+    payment_lag: 0
+
+# IMM dates configuration
+imm_dates:
+  description: International Monetary Market dates
+  months: [3, 6, 9, 12]  # March, June, September, December
+  day: 3rd_wednesday
+  calendar: all
+  
+  examples:
+    - year: 2024
+      dates:
+        - 2024-03-20
+        - 2024-06-19
+        - 2024-09-18
+        - 2024-12-18
+
+# Stub period handling
+stub_periods:
+  - type: short_initial
+    description: Short stub at beginning
+    example:
+      effective: 2024-01-15
+      first_regular: 2024-03-31
+      termination: 2024-12-31
+      frequency: Q
+      
+  - type: long_initial
+    description: Long stub at beginning
+    example:
+      effective: 2024-01-15
+      first_regular: 2024-06-30
+      termination: 2024-12-31
+      frequency: Q
+      
+  - type: short_final
+    description: Short stub at end
+    example:
+      effective: 2024-01-01
+      termination: 2024-11-15
+      frequency: Q
+      
+  - type: long_final
+    description: Long stub at end
+    example:
+      effective: 2024-01-01
+      termination: 2025-02-15
+      frequency: Q
+
+# Accrual period adjustments
+accrual_adjustments:
+  - id: standard
+    description: Standard accrual with business day adjustments
+    adjust_effective: true
+    adjust_termination: true
+    
+  - id: unadjusted
+    description: No adjustment to accrual dates
+    adjust_effective: false
+    adjust_termination: false
+    
+  - id: adjusted_payment_only
+    description: Adjust payment dates only
+    adjust_payment: true
+    adjust_accrual: false
+
+# Roll conventions
+roll_conventions:
+  - id: eom
+    description: End of month rolling
+    
+  - id: imm
+    description: IMM date rolling
+    
+  - id: fixed_day
+    description: Fixed day of month
+    examples: [1, 15, 30]
+    
+  - id: weekday
+    description: Specific weekday
+    examples: ["1st_monday", "3rd_wednesday", "last_friday"]
+
+# Frequency mappings
+frequencies:
+  - code: D
+    description: Daily
+    periods_per_year: 252  # Business days
+    
+  - code: W
+    description: Weekly
+    periods_per_year: 52
+    
+  - code: M
+    description: Monthly
+    periods_per_year: 12
+    
+  - code: Q
+    description: Quarterly
+    periods_per_year: 4
+    
+  - code: S
+    description: Semi-annual
+    periods_per_year: 2
+    
+  - code: A
+    description: Annual
+    periods_per_year: 1
+    
+  - code: Z
+    description: Zero coupon (single payment)
+    periods_per_year: 0
+
+# Example schedule generation
+example_schedules:
+  - name: Bond coupon schedule
+    instrument_type: FixedRateBond
+    schedule_config:
+      effective: 2024-01-15
+      maturity: 2034-01-15
+      frequency: S
+      calendar: nyc
+      convention: unadjusted
+      
+  - name: Swap payment schedule
+    instrument_type: IRS
+    fixed_leg:
+      frequency: S
+      calendar: nyc
+      convention: modified_following
+    float_leg:
+      frequency: Q
+      calendar: nyc
+      convention: modified_following
+      
+  - name: Amortizing loan schedule
+    instrument_type: Loan
+    schedule_config:
+      effective: 2024-01-01
+      maturity: 2029-01-01
+      frequency: M
+      calendar: nyc
+      convention: modified_following
+      amortization_type: linear

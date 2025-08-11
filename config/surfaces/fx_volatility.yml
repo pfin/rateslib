@@ -1,0 +1,111 @@
+# FX Volatility Surface Configuration
+
+# Market setup
+fx_market:
+  pair: eurusd
+  spot: 1.34664
+  settlement: 2009-05-05
+  eval_date: 2009-05-03
+  
+  # Interest rate curves for FX forwards
+  curves:
+    eur:
+      nodes:
+        - {date: 2009-05-03, df: 1.0}
+        - {date: 2011-05-10, df: 1.0}
+      cc_zero_rate: 1.00  # At 2009-05-04
+    
+    usd:
+      nodes:
+        - {date: 2009-05-03, df: 1.0}
+        - {date: 2011-05-10, df: 1.0}
+      cc_zero_rate: 0.4759550366220911  # At 2009-05-04
+
+# Market volatility data
+market_data:
+  # Format: [25d_put, atm, 25d_call]
+  1y:
+    strikes: [1.1964, 1.3620, 1.5501]
+    vols: [19.590, 18.250, 18.967]
+  
+  18m:  # Target for interpolation
+    strikes: [1.1733, 1.3689, 1.5974]
+    vols: [19.068, 17.870, 18.485]
+  
+  2y:
+    strikes: [1.1538, 1.3748, 1.6393]
+    vols: [18.801, 17.677, 18.239]
+
+# Delta Vol Surface configuration
+delta_vol_surface:
+  id: dv
+  eval_date: 2009-05-03
+  delta_type: forward
+  
+  expiries:
+    - 2010-05-03  # 1Y
+    - 2011-05-03  # 2Y
+  
+  delta_indexes: [0.25, 0.5, 0.75]
+  
+  # Initial guess for node values (will be calibrated)
+  initial_values:
+    - [5, 5, 5]  # 1Y
+    - [5, 5, 5]  # 2Y
+  
+  calibration_instruments:
+    - {expiry: 1y, type: put, strike: -25d, target_vol: 19.59}
+    - {expiry: 1y, type: call, strike: atm_delta, target_vol: 18.25}
+    - {expiry: 1y, type: call, strike: 25d, target_vol: 18.967}
+    - {expiry: 2y, type: put, strike: -25d, target_vol: 18.801}
+    - {expiry: 2y, type: call, strike: atm_delta, target_vol: 17.677}
+    - {expiry: 2y, type: call, strike: 25d, target_vol: 18.239}
+
+# SABR Surface configuration
+sabr_surface:
+  id: sabr
+  eval_date: 2009-05-03
+  pair: eurusd
+  
+  expiries:
+    - 2010-05-03  # 1Y
+    - 2011-05-03  # 2Y
+  
+  # SABR parameters: [alpha, beta, rho, nu]
+  initial_parameters:
+    - [0.05, 1.0, 0.01, 0.01]  # 1Y
+    - [0.05, 1.0, 0.01, 0.01]  # 2Y
+  
+  calibration_instruments:
+    - {expiry: 1y, type: put, strike: -25d, target_vol: 19.59}
+    - {expiry: 1y, type: call, strike: atm_delta, target_vol: 18.25}
+    - {expiry: 1y, type: call, strike: 25d, target_vol: 18.967}
+    - {expiry: 2y, type: put, strike: -25d, target_vol: 18.801}
+    - {expiry: 2y, type: call, strike: atm_delta, target_vol: 17.677}
+    - {expiry: 2y, type: call, strike: 25d, target_vol: 18.239}
+
+# Interpolation test points
+interpolation_test:
+  expiry: 18m  # 1.5 years
+  
+  expected_delta_vol:
+    25d_put: {strike: 1.1726, vol: 19.065}
+    atm: {strike: 1.3684, vol: 17.868}
+    25d_call: {strike: 1.5971, vol: 18.482}
+  
+  expected_sabr:
+    25d_put: {strike: 1.1722, vol: 19.081}
+    atm: {strike: 1.3685, vol: 17.870}
+    25d_call: {strike: 1.5985, vol: 18.511}
+
+# Smile comparison configuration
+smile_comparison:
+  expiry: 18m
+  strike_range:
+    start: 1.15
+    end: 1.65
+    step: 0.0025
+  
+  plot_settings:
+    show_legend: true
+    labels: ["DeltaVol", "SABR"]

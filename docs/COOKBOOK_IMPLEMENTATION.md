@@ -1,8 +1,8 @@
-# Rateslib Cookbook Implementation Guide
+# Rateslib Cookbook Implementation
 
 ## Overview
 
-This document provides a comprehensive guide to all 29 cookbook recipes from the rateslib documentation, organized into categories with complete implementation details.
+This document describes the complete implementation of all 29 cookbook recipes from the rateslib documentation into a unified, modular framework with YAML configuration support.
 
 ## Recipe Categories
 

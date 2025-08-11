@@ -12,6 +12,40 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Use appropriate tools (e.g., Puppeteer for complex web scraping)
 - Be methodical and thorough - quality over speed
 
+## Expand-Then-Compress Development Philosophy
+
+### Core Principle
+**Expand first, compress second** - explore multiple implementations before selecting optimal patterns, like Shadow Monte Carlo exploring all paths.
+
+### Phase 1: EXPAND (Exploration)
+- Generate 3-5 different implementations for each feature
+- Try orthogonal approaches (different algorithms/patterns)
+- Include "shadow paths" that reveal constraints
+- Let complexity emerge naturally
+- Run parallel explorations like MCTS branches
+
+### Phase 2: COMPRESS (Optimization)
+- Identify invariants across implementations
+- Find "butterfly points" - small changes with large impacts
+- Extract variation to YAML configurations
+- Reduce to minimal code with maximum flexibility
+- Combine best aspects of different paths
+
+### Applied to Rateslib Cookbook
+- **Expansion**: All 29 recipes implemented individually
+- **Compression**: Common patterns → config system
+- **Butterfly Points**: 
+  - Knot sequences (control interpolation transitions)
+  - Turn dates (year-end rate adjustments)
+  - Calibration instruments (market data points)
+- **Result**: Unified cookbook_recipes.py + comprehensive YAML configs
+
+### Phoenix Interrupt Pattern
+Every 5 minutes, check: "Is this path toxic?" Kill branches showing:
+- Endless complexity without value
+- Research spirals without implementation
+- Positive completion without actual results
+
 ## Important File Management Rules
 
 **NEVER create new files unless explicitly asked.** Always prefer modifying existing files:

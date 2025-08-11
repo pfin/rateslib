@@ -2,6 +2,16 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Critical Work Principles
+
+**ALWAYS verify success at each step before proceeding.** Never assume operations succeed:
+- Check that files exist after creation
+- Verify edits were applied correctly  
+- Test code runs before moving to next task
+- Confirm data was extracted completely
+- Use appropriate tools (e.g., Puppeteer for complex web scraping)
+- Be methodical and thorough - quality over speed
+
 ## Important File Management Rules
 
 **NEVER create new files unless explicitly asked.** Always prefer modifying existing files:

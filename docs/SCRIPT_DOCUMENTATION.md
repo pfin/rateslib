@@ -17,7 +17,7 @@ This document provides comprehensive documentation for all converted Jupyter not
 
 ### Scripts
 - `coding_2/Curves.py` - Basic curve operations
-- `coding/curves_fixed.py` - Fixed version with proper API usage
+- `coding/curves.py` - Contains private API usage (needs updating)
 
 ### Flow Chart
 ```mermaid
@@ -259,8 +259,7 @@ duration = bond.duration(curve)
 ## Automatic Differentiation
 
 ### Scripts
-- `coding_2/AutomaticDifferentiation.py` - AD demonstration
-- `coding_2/AutomaticDifferentiation_Enhanced.py` - Enhanced version
+- `coding_2/AutomaticDifferentiation.py` - AD demonstration with formatted output
 
 ### Flow Chart
 ```mermaid
@@ -331,7 +330,6 @@ hessian = gradient(f2, ["x", "y"], order=2)
 
 ### Scripts
 - `coding_2/CurveSolving.py` - Curve solving techniques
-- `coding_2/CurveSolving_Enhanced.py` - Enhanced version
 
 ### Flow Chart
 ```mermaid
@@ -399,8 +397,7 @@ rate = ift_1dim(price_from_rate, target_price=95.0)
 ## Interpolation and Splines
 
 ### Scripts
-- `coding_2/InterpolationAndSplines.py` - Spline interpolation
-- `coding_2/InterpolationAndSplines_Enhanced.py` - Enhanced version
+- `coding_2/InterpolationAndSplines.py` - Spline interpolation with visualization
 
 ### Flow Chart
 ```mermaid

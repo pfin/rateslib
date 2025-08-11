@@ -79,8 +79,8 @@ spline.csolve(
     allow_lsq=False,
 )
 
-
-spline.c
+print(f"Created financial curve spline (degree {spline.k})")
+print(f"Spline coefficients: {spline.c}")
 
 
 
@@ -109,7 +109,8 @@ log_spline.csolve(
     right_n=2,
     allow_lsq=False,
 )
-log_spline.c
+print(f"Created log-spline for discount factors")
+print(f"Log-spline coefficients: {log_spline.c}")
 
 
 try:

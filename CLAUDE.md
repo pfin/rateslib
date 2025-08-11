@@ -2,6 +2,15 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Important File Management Rules
+
+**NEVER create new files unless explicitly asked.** Always prefer modifying existing files:
+- If documentation is needed, extend existing docs
+- If scripts need enhancement, modify the originals
+- If examples are needed, add to existing examples
+- Always come up with a plan for file modification first
+- Only create new files when specifically requested by the user
+
 ## Project Overview
 
 Rateslib is a state-of-the-art fixed income library for Python that provides advanced financial analysis capabilities for interest rates, derivatives, swaps, bonds, and other fixed income instruments. It's a hybrid Python/Rust project using PyO3 for performance-critical components.

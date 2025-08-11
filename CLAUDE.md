@@ -366,11 +366,15 @@ python scripts/convert_notebooks_v2.py
 
 This creates executable Python scripts in `scripts/examples/` that can be run without Jupyter.
 
-### Running Examples Documentation
-For comprehensive instructions on running all example scripts, including:
-- Command-line instructions for each script
-- Expected output descriptions
-- Mermaid class and flow diagrams
-- Troubleshooting guide
+### Documentation References
 
-See: `docs/RUNNING_EXAMPLES.md`
+#### Core Documentation
+- **Architecture Overview**: `docs/VISUAL_ARCHITECTURE.md` - System diagrams and component interactions
+- **Mathematical Reference**: `docs/MATHEMATICAL_FOUNDATIONS.md` - Formulas and theory
+- **Class Reference**: `docs/COMPLETE_CLASS_REFERENCE.md` - Complete API reference
+- **Documentation Index**: `docs/DOCUMENTATION_SUMMARY.md` - Master index of all documentation
+
+#### Example Script Documentation
+- **Script Guide**: `docs/SCRIPT_DOCUMENTATION.md` - Overview of all example scripts
+- **Running Examples**: `docs/RUNNING_EXAMPLES.md` - How to run examples with expected output
+- **Individual Script Docs**: Each script in `scripts/examples/` has a corresponding `.md` file with detailed documentation

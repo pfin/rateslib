@@ -37,6 +37,18 @@ Read the documentation at
 [rateslib.com/py](https://rateslib.com/py/)
 
 
+Documentation
+=============
+
+For detailed documentation, see:
+
+- **API Documentation**: [rateslib.com/py](https://rateslib.com/py/)
+- **Architecture Overview**: [docs/VISUAL_ARCHITECTURE.md](docs/VISUAL_ARCHITECTURE.md) - System diagrams and component interactions
+- **Mathematical Reference**: [docs/MATHEMATICAL_FOUNDATIONS.md](docs/MATHEMATICAL_FOUNDATIONS.md) - Formulas and theory
+- **Class Reference**: [docs/COMPLETE_CLASS_REFERENCE.md](docs/COMPLETE_CLASS_REFERENCE.md) - Complete API reference
+- **Example Scripts**: [docs/SCRIPT_DOCUMENTATION.md](docs/SCRIPT_DOCUMENTATION.md) - Guide to all example scripts
+- **Running Examples**: [docs/RUNNING_EXAMPLES.md](docs/RUNNING_EXAMPLES.md) - How to run example scripts
+
 Development Setup
 =================
 

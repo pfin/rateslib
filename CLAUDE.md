@@ -55,6 +55,43 @@ Every 5 minutes, check: "Is this path toxic?" Kill branches showing:
 - Always come up with a plan for file modification first
 - Only create new files when specifically requested by the user
 
+## Parallel Task Execution Guidelines
+
+**CRITICAL**: When Axiom MCP fails (which it currently does with timeouts), use native parallel subagent abilities instead:
+
+### When to Use Parallel Execution
+- Web scraping multiple URLs
+- Data extraction from multiple sources
+- Processing multiple files simultaneously
+- Complex tasks that can be decomposed into orthogonal sub-tasks
+
+### Axiom Alternative Pattern
+Since Axiom MCP is currently non-functional (timeout errors), always:
+
+1. **Decompose user requests** into orthogonal tasks immediately
+2. **Use native Claude abilities** to process multiple items in parallel batches
+3. **Execute tasks sequentially** but in batched groups when possible
+4. **Verify each step** before proceeding to the next batch
+
+### Example Implementation
+Instead of relying on Axiom spawn/orchestration:
+```python
+# BAD: Axiom dependency (currently fails)
+axiom_spawn("extract recipes 13-17")
+
+# GOOD: Native parallel decomposition
+tasks = [
+    "Extract recipe 13: EURUSD market",
+    "Extract recipe 14: Bond conventions", 
+    "Extract recipe 15: Index curves",
+    "Extract recipe 16: Inflation curves",
+    "Extract recipe 17: IBOR stubs"
+]
+# Then execute each task directly with proper error handling
+```
+
+This approach ensures reliability when Axiom is unavailable while maintaining the benefits of task decomposition.
+
 ## Project Overview
 
 Rateslib is a state-of-the-art fixed income library for Python that provides advanced financial analysis capabilities for interest rates, derivatives, swaps, bonds, and other fixed income instruments. It's a hybrid Python/Rust project using PyO3 for performance-critical components.

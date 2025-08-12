@@ -1,0 +1,108 @@
+name: "Recipe 1: Single Currency Curve"
+description: "Replicating single currency curve with mixed interpolation"
+
+curves:
+  - id: "main"
+    interpolation: "log_linear"
+    convention: "act365f"
+    calendar: "all"
+    nodes:
+      2022-01-01: 1.0
+      2022-03-15: 1.0
+      2022-06-15: 1.0
+      2022-09-21: 1.0
+      2022-12-21: 1.0
+      2023-03-15: 1.0
+      2023-06-21: 1.0
+      2023-09-20: 1.0
+      2023-12-20: 1.0
+      2024-03-15: 1.0
+      2025-01-01: 1.0
+      2027-01-01: 1.0
+      2029-01-01: 1.0
+      2032-01-01: 1.0
+
+instruments:
+  - type: "irs"
+    effective: "2022-01-01"
+    termination: "1b"
+    frequency: "A"
+    convention: "act365f"
+  - type: "irs"
+    effective: "2022-03-15"
+    termination: "2022-06-15"
+    frequency: "A"
+    convention: "act365f"
+  - type: "irs"
+    effective: "2022-06-15"
+    termination: "2022-09-21"
+    frequency: "A"
+    convention: "act365f"
+  - type: "irs"
+    effective: "2022-09-21"
+    termination: "2022-12-21"
+    frequency: "A"
+    convention: "act365f"
+  - type: "irs"
+    effective: "2022-12-21"
+    termination: "2023-03-15"
+    frequency: "A"
+    convention: "act365f"
+  - type: "irs"
+    effective: "2023-03-15"
+    termination: "2023-06-21"
+    frequency: "A"
+    convention: "act365f"
+  - type: "irs"
+    effective: "2023-06-21"
+    termination: "2023-09-20"
+    frequency: "A"
+    convention: "act365f"
+  - type: "irs"
+    effective: "2023-09-20"
+    termination: "2023-12-20"
+    frequency: "A"
+    convention: "act365f"
+  - type: "irs"
+    effective: "2023-12-20"
+    termination: "2024-03-15"
+    frequency: "A"
+    convention: "act365f"
+  - type: "irs"
+    effective: "2022-01-01"
+    termination: "3y"
+    frequency: "A"
+    convention: "act365f"
+  - type: "irs"
+    effective: "2022-01-01"
+    termination: "5y"
+    frequency: "A"
+    convention: "act365f"
+  - type: "irs"
+    effective: "2022-01-01"
+    termination: "7y"
+    frequency: "A"
+    convention: "act365f"
+  - type: "irs"
+    effective: "2022-01-01"
+    termination: "10y"
+    frequency: "A"
+    convention: "act365f"
+
+solvers:
+  - id: "main_solver"
+    curves: ["main"]
+    instruments: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    market_rates: [1.0, 1.05, 1.12, 1.16, 1.21, 1.27, 1.45, 1.68, 1.92, 1.68, 2.10, 2.20, 2.07]
+
+outputs:
+  - "curve_rates"
+  - "npv"
+  - "risk"
+  - "cashflows"
+  - "analytics"
+
+metadata:
+  recipe_number: 1
+  category: "Interest Rate Curve Building"
+  complexity: "Basic"
